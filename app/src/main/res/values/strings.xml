@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Clipboard Whitelist</string>
+    <string name="xposedDescription">Enable Clipboard Whitelist on Android 10+</string>
+    <string name="menu_search">Search</string>
+    <string name="include_system">Include System</string>
+    <string name="unavailable">Module not unavailable, please enable module first</string>
+</resources>
