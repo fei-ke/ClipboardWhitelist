@@ -28,6 +28,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        setProperty("archivesBaseName", "${rootProject.name}-v${versionName}-${versionCode}")
     }
 
     compileOptions {
