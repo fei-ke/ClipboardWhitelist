@@ -33,7 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import one.yufz.clipboard.app.widget.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -57,8 +57,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import one.yufz.clipboard.R
 import one.yufz.clipboard.app.widget.SearchBar
-import one.yufz.clipboard.app.widget.pullrefresh.PullRefreshIndicator
-import one.yufz.clipboard.app.widget.pullrefresh.pullRefresh
 
 @Composable
 fun HomeScreen(homeViewModel: HomeViewModel = mavericksViewModel()) {
@@ -87,13 +85,11 @@ fun HomeScreen(homeViewModel: HomeViewModel = mavericksViewModel()) {
                 .padding(top = padding.calculateTopPadding())
         ) {
             if (uiState.available) {
-                val refreshState = rememberPullRefreshState(uiState.appList is Loading, {
-                    homeViewModel.refresh()
-                })
-
-                Box(Modifier.pullRefresh(refreshState)) {
+                val isRefreshing = uiState.appList is Loading
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = { homeViewModel.refresh() }) {
                     AppListScreen(homeViewModel, uiState.filteredAppList)
-                    PullRefreshIndicator(uiState.appList is Loading, refreshState, Modifier.align(Alignment.TopCenter))
                 }
             } else {
                 Unavailable()
