@@ -87,10 +87,11 @@ fun SearchBar(
                 .onFocusChanged { focusState -> showClearButton = (focusState.isFocused) }
                 .focusRequester(focusRequester),
             placeholder = { Text(text = placeholderText) },
-            colors = TextFieldDefaults.textFieldColors(
+            colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                containerColor = Color.Transparent,
+                focusedContainerColor = Color.Transparent,
+                unfocusedContainerColor = Color.Transparent,
             ),
             trailingIcon = {
                 AnimatedVisibility(
