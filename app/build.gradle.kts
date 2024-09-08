@@ -87,7 +87,8 @@ android {
 }
 
 dependencies {
-    compileOnly("de.robv.android.xposed:api:82")
+    compileOnly(fileTree("compile-libs") { include("*.jar") })
+
     implementation("com.airbnb.android:mavericks:3.0.9")
     implementation("com.airbnb.android:mavericks-compose:3.0.9")
 
