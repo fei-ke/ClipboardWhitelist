@@ -22,8 +22,13 @@ jobs:
     - name: Get Tag
       id: var
       run: |
-        echo ::set-output name=tag::${GITHUB_REF#refs/*/}
-        echo ::set-output name=version::${GITHUB_REF#refs/*/v}
+        echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+        echo "version=${GITHUB_REF#refs/*/v}" >> $GITHUB_OUTPUT
+        {
+          echo 'annotation<<EOF'
+          git for-each-ref "${GITHUB_REF}" --format '%(contents)'
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
 
     - name: set up JDK
       uses: actions/setup-java@v2
@@ -47,7 +52,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleRelease
 
-    - name: Collect artifcat name
+    - name: Collect artifact name
       run: |
         echo "release_artifact=$(basename -s .apk app/build/outputs/apk/release/*.apk)" >> $GITHUB_ENV
 
@@ -62,15 +67,13 @@ jobs:
       with:
         name: mapping
         path: app/build/outputs/mapping/release/mapping.txt
-        
-    - uses: ericcornelissen/git-tag-annotation-action@v2
-      id: tag-data
 
     - name: Create Release
       uses: ncipollo/release-action@v1
       with:
         tag: ${{ steps.var.outputs.tag }}
-        body: ${{ steps.tag-data.outputs.git-tag-annotation }}
+        body: ${{ steps.var.outputs.annotation }}
+        token: ${{ secrets.GH_TOKEN }}
         artifacts: "app/build/outputs/apk/release/*.apk,app/build/outputs/mapping/release/mapping.txt"
         allowUpdates: true
         removeArtifacts: true
