@@ -4,7 +4,14 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose") version "2.0.0"
+    id("org.lsposed.lsplugin.jgit") version "1.1"
 }
+
+val repo = jgit.repo()
+val commitCount = (repo?.commitCount("refs/remotes/origin/master") ?: 1)
+val latestTag = repo?.latestTag?.removePrefix("v") ?: "0.0.0"
+val verCode by extra(commitCount)
+val verName by extra(latestTag)
 
 android {
     namespace = "one.yufz.clipboard"
@@ -14,8 +21,8 @@ android {
         applicationId = "one.yufz.clipboard"
         minSdk = 29
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = verCode
+        versionName = verName
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
